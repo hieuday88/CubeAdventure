@@ -46,7 +46,6 @@ public class CubeController : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool drawDebugGizmos;
 
-    private const float MinGroundNormalY = 0.01f;
     private const int MaxGroundHits = 8;
 
     private readonly RaycastHit2D[] groundHits = new RaycastHit2D[MaxGroundHits];
@@ -76,7 +75,7 @@ public class CubeController : MonoBehaviour
     private Vector2 dashDirection = Vector2.right;
     private float facingDirection = 1f;
 
-    private void Awake()
+    protected void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
@@ -162,7 +161,7 @@ public class CubeController : MonoBehaviour
     private void Update()
     {
         moveInputVector = ReadMoveVector();
-        moveInput = ReadMoveInput();
+        moveInput = moveInputVector.x;
 
         if (Mathf.Abs(moveInput) > 0.01f)
         {
@@ -199,6 +198,7 @@ public class CubeController : MonoBehaviour
         UpdateGroundState();
 
         jumpReleasedThisFrame = false;
+
     }
 
     private void HandleJumpPressed()
@@ -214,11 +214,6 @@ public class CubeController : MonoBehaviour
 
         jumpBufferCounter = jumpBufferTime;
         lastJumpPressTime = now;
-    }
-
-    private float ReadMoveInput()
-    {
-        return ReadMoveVector().x;
     }
 
     private Vector2 ReadMoveVector()

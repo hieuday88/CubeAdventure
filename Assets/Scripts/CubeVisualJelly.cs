@@ -22,7 +22,6 @@ public class CubeVisualJelly : MonoBehaviour
     [SerializeField] private float tiltInAirMultiplier = 0.55f;
 
     [Header("Rotation Follow")]
-    [SerializeField] private bool useLocalVelocityForTilt = true;
     [SerializeField] private float angularTiltWeight = 0.12f;
     [SerializeField] private float maxAngularTilt = 14f;
 
@@ -48,7 +47,6 @@ public class CubeVisualJelly : MonoBehaviour
     [SerializeField] private float groundPoundShakeThreshold = 0.9f;
     [SerializeField] private float groundPoundShakeMultiplier = 1.35f;
 
-    private CubeController controller;
     private Rigidbody2D body;
 
     private Vector3 visualBaseScale = Vector3.one;
@@ -65,9 +63,10 @@ public class CubeVisualJelly : MonoBehaviour
     private bool wasDashing;
     private bool wasGroundPounding;
 
+    private CubeController Controller => GameManager.Instance.cubeControllerRef;
+
     private void Awake()
     {
-        controller = GetComponent<CubeController>();
         body = GetComponent<Rigidbody2D>();
 
         if (visualRoot == null)
@@ -86,16 +85,16 @@ public class CubeVisualJelly : MonoBehaviour
 
     private void OnEnable()
     {
-        wasGrounded = controller != null && controller.IsGrounded;
-        previousVerticalVelocity = controller != null ? controller.Velocity.y : 0f;
+        wasGrounded = Controller.IsGrounded;
+        previousVerticalVelocity = Controller.Velocity.y;
         landingSquashImpulse = 0f;
         dashPulseImpulse = 0f;
         groundPoundPulseImpulse = 0f;
         currentTiltAngle = 0f;
         scaleVelocity = Vector3.zero;
         tiltVelocity = 0f;
-        wasDashing = controller != null && controller.IsDashing;
-        wasGroundPounding = controller != null && controller.IsGroundPounding;
+        wasDashing = Controller.IsDashing;
+        wasGroundPounding = Controller.IsGroundPounding;
     }
 
     private void OnValidate()
@@ -129,19 +128,19 @@ public class CubeVisualJelly : MonoBehaviour
 
     private void Update()
     {
-        if (controller == null || visualRoot == null)
+        if (visualRoot == null)
         {
             return;
         }
 
-        Vector2 velocity = controller.Velocity;
+        Vector2 velocity = Controller.Velocity;
         Vector2 localVelocity = GetLocalVelocity(velocity);
-        bool isGrounded = controller.IsGrounded;
-        bool isDashing = controller.IsDashing;
-        bool isGroundPounding = controller.IsGroundPounding;
+        bool isGrounded = Controller.IsGrounded;
+        bool isDashing = Controller.IsDashing;
+        bool isGroundPounding = Controller.IsGroundPounding;
 
-        ApplyLandingImpulseIfNeeded(isGrounded, velocity.y);
-        ApplySpecialMoveTransitions(isDashing, isGroundPounding, localVelocity);
+        ApplyLandingImpulseIfNeeded(isGrounded);
+        ApplySpecialMoveTransitions(isDashing, isGroundPounding);
         ApplyGroundPoundCameraShake(isGrounded, isGroundPounding);
         TickScaleVisual(Time.deltaTime, localVelocity, velocity, isGrounded, isDashing, isGroundPounding);
         TickTiltVisual(Time.deltaTime, localVelocity, isGrounded, isDashing, isGroundPounding);
@@ -153,11 +152,11 @@ public class CubeVisualJelly : MonoBehaviour
         wasGroundPounding = isGroundPounding;
     }
 
-    private void ApplyLandingImpulseIfNeeded(bool isGrounded, float currentVerticalVelocity)
+    private void ApplyLandingImpulseIfNeeded(bool isGrounded)
     {
         if (!wasGrounded && isGrounded && previousVerticalVelocity < -0.5f)
         {
-            float normalizedImpact = Mathf.InverseLerp(0.5f, controller.TerminalFallSpeed, Mathf.Abs(previousVerticalVelocity));
+            float normalizedImpact = Mathf.InverseLerp(0.5f, Controller.TerminalFallSpeed, Mathf.Abs(previousVerticalVelocity));
             landingSquashImpulse = Mathf.Max(landingSquashImpulse, normalizedImpact * landingSquashAmount);
         }
     }
@@ -168,7 +167,7 @@ public class CubeVisualJelly : MonoBehaviour
         return new Vector2(localVelocity3.x, localVelocity3.y);
     }
 
-    private void ApplySpecialMoveTransitions(bool isDashing, bool isGroundPounding, Vector2 localVelocity)
+    private void ApplySpecialMoveTransitions(bool isDashing, bool isGroundPounding)
     {
         if (isDashing && !wasDashing)
         {
@@ -198,15 +197,15 @@ public class CubeVisualJelly : MonoBehaviour
             return;
         }
 
-        float impact = Mathf.InverseLerp(groundPoundShakeThreshold, controller.TerminalFallSpeed, Mathf.Abs(previousVerticalVelocity));
+        float impact = Mathf.InverseLerp(groundPoundShakeThreshold, Controller.TerminalFallSpeed, Mathf.Abs(previousVerticalVelocity));
         float intensity = Mathf.Clamp01(impact * groundPoundShakeMultiplier);
         cameraShake.ShakeGroundPound(intensity);
     }
 
     private void TickScaleVisual(float dt, Vector2 localVelocity, Vector2 worldVelocity, bool isGrounded, bool isDashing, bool isGroundPounding)
     {
-        float horizontalRatio = controller.MaxMoveSpeed > 0.001f
-            ? Mathf.Clamp01(Mathf.Abs(localVelocity.x) / controller.MaxMoveSpeed)
+        float horizontalRatio = Controller.MaxMoveSpeed > 0.001f
+            ? Mathf.Clamp01(Mathf.Abs(localVelocity.x) / Controller.MaxMoveSpeed)
             : 0f;
 
         float verticalRatio = Mathf.Clamp(localVelocity.y / maxStretchVelocity, -1f, 1f);
@@ -275,8 +274,8 @@ public class CubeVisualJelly : MonoBehaviour
 
     private void TickTiltVisual(float dt, Vector2 localVelocity, bool isGrounded, bool isDashing, bool isGroundPounding)
     {
-        float horizontalRatio = controller.MaxMoveSpeed > 0.001f
-            ? Mathf.Clamp(Mathf.Abs(localVelocity.x) / controller.MaxMoveSpeed, 0f, 1f)
+        float horizontalRatio = Controller.MaxMoveSpeed > 0.001f
+            ? Mathf.Clamp(Mathf.Abs(localVelocity.x) / Controller.MaxMoveSpeed, 0f, 1f)
             : 0f;
 
         float targetTilt = -Mathf.Sign(localVelocity.x) * maxTiltAngle * horizontalRatio;
