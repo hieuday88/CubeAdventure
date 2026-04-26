@@ -50,13 +50,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Fade: 1
-    - _Fill: 0.51
+    - _Fade: 1.38
+    - _Fill: 0.57
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WaveStrength: 0.11
-    - _noiseWavw: 0.1
-    - _sinWave: 0
+    - _WaveStrength: 2.28
+    - _noiseWavw: 0.97
+    - _sinWave: 0.27
     m_Colors:
     - _Color: {r: 0.13333318, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

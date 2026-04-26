@@ -12,11 +12,12 @@ public class DissolveParticlesController : MonoBehaviour
     [SerializeField] private ParticleSystem regenParticleSystemRef;
 
     [Header("Dissolve")]
-    [SerializeField] private string weightPropertyName = "_Weight";
-    [SerializeField] private string glowPropertyName = "_Glow";
+    [SerializeField] private string dissolveEnabledPropertyName = "_DissolveEnabled";
+    [SerializeField] private string weightPropertyName = "_DissolveWeight";
+    [SerializeField] private string glowPropertyName = "_DissolveGlow";
     [SerializeField] private string dissolveColorPropertyName = "_DissolveColor";
     [SerializeField] private string disintegrationColorPropertyName = "_DisintegrationColor";
-    [SerializeField] private string directionPropertyName = "_Direction";
+    [SerializeField] private string directionPropertyName = "_DissolveDirection";
     [SerializeField] private float maxGlow = 5f;
     [SerializeField] private float dissolveDuration = 0.8f;
     [SerializeField] private bool disableRendererWhenDone = true;
@@ -28,12 +29,14 @@ public class DissolveParticlesController : MonoBehaviour
     [SerializeField] private Vector2 velocityYRange = new Vector2(1.4f, 3.2f);
 
     private MaterialPropertyBlock propertyBlock;
+    private int dissolveEnabledPropertyId;
     private int weightPropertyId;
     private int glowPropertyId;
     private int dissolveColorPropertyId;
     private int disintegrationColorPropertyId;
     private int directionPropertyId;
     private Coroutine playRoutine;
+    private const string DissolveKeyword = "DISSOLVE_ON";
 
     private void Awake()
     {
@@ -46,16 +49,36 @@ public class DissolveParticlesController : MonoBehaviour
         {
             shadowCaster2DRef = GetComponent<ShadowCaster2D>();
         }
-
         propertyBlock = new MaterialPropertyBlock();
+        dissolveEnabledPropertyId = Shader.PropertyToID(dissolveEnabledPropertyName);
         weightPropertyId = Shader.PropertyToID(weightPropertyName);
         glowPropertyId = Shader.PropertyToID(glowPropertyName);
         dissolveColorPropertyId = Shader.PropertyToID(dissolveColorPropertyName);
         disintegrationColorPropertyId = Shader.PropertyToID(disintegrationColorPropertyName);
         directionPropertyId = Shader.PropertyToID(directionPropertyName);
-
+        SetDissolveKeywordEnabled(true);
+        SetDissolveEnabled(true);
         SetWeight(0f);
         SetGlow(0f);
+    }
+
+    private static string ResolvePropertyName(Material mat, string currentValue, params string[] fallbacks)
+    {
+        if (!string.IsNullOrEmpty(currentValue) && mat.HasProperty(currentValue))
+        {
+            return currentValue;
+        }
+
+        for (int i = 0; i < fallbacks.Length; i++)
+        {
+            string candidate = fallbacks[i];
+            if (mat.HasProperty(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        return currentValue;
     }
 
     private void OnValidate()
@@ -104,6 +127,7 @@ public class DissolveParticlesController : MonoBehaviour
 
     private IEnumerator PlayDissolveRoutine()
     {
+        SetDissolveEnabled(true);
         SetRotationZZero();
         SetWeight(0f);
         SetGlow(0f);
@@ -143,6 +167,7 @@ public class DissolveParticlesController : MonoBehaviour
 
     private IEnumerator PlayRegenRoutine()
     {
+        SetDissolveEnabled(true);
         SetRotationZZero();
         SetDissolveColor(Color.green);
         SetDisintegrationColor(Color.green);
@@ -174,8 +199,39 @@ public class DissolveParticlesController : MonoBehaviour
         EmitParticles(regenParticleSystemRef, endBurstCount);
         SetDissolveColor(Color.red);
         SetDisintegrationColor(Color.red);
+        SetDissolveEnabled(true);
         SetShadowCasterEnabled(true);
         playRoutine = null;
+    }
+
+    private void SetDissolveEnabled(bool enabled)
+    {
+        if (targetRenderer == null)
+        {
+            return;
+        }
+
+        targetRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetFloat(dissolveEnabledPropertyId, enabled ? 1f : 0f);
+        targetRenderer.SetPropertyBlock(propertyBlock);
+    }
+
+    private void SetDissolveKeywordEnabled(bool enabled)
+    {
+        if (targetRenderer == null)
+        {
+            return;
+        }
+
+        Material material = targetRenderer.material;
+        if (enabled)
+        {
+            material.EnableKeyword(DissolveKeyword);
+        }
+        else
+        {
+            material.DisableKeyword(DissolveKeyword);
+        }
     }
 
     private void EmitParticles(ParticleSystem targetParticleSystem, int count)
