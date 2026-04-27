@@ -51,7 +51,7 @@ public class Laser : MonoBehaviour
     {
         Laser target = FindNearestLaser();
 
-        if (target == null || !ShouldRenderConnectionTo(target))
+        if (target == null)
         {
             lineRenderer.enabled = false;
             return;
@@ -87,12 +87,6 @@ public class Laser : MonoBehaviour
         }
 
         return nearest;
-    }
-
-    private bool ShouldRenderConnectionTo(Laser target)
-    {
-        // Ensure one renderer per pair to avoid two overlapping lines.
-        return GetInstanceID() < target.GetInstanceID();
     }
 
     private void SetupLineRenderer()

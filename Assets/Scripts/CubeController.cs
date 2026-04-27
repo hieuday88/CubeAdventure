@@ -1,9 +1,18 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D))]
 public class CubeController : MonoBehaviour
 {
+    public enum CubeColor
+    {
+        Default,
+        Red,
+        Green,
+        Blue
+    }
+
     [Header("Input Actions")]
     [SerializeField] private InputAction moveAction;
     [SerializeField] private InputAction jumpAction;
@@ -46,6 +55,9 @@ public class CubeController : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool drawDebugGizmos;
 
+    [Header("Color State")]
+    [SerializeField] private CubeColor currentColor = CubeColor.Default;
+
     private const int MaxGroundHits = 8;
 
     private readonly RaycastHit2D[] groundHits = new RaycastHit2D[MaxGroundHits];
@@ -74,6 +86,10 @@ public class CubeController : MonoBehaviour
     private float dashCooldownCounter;
     private Vector2 dashDirection = Vector2.right;
     private float facingDirection = 1f;
+
+    private bool isForceMoving;
+    private Vector2 forceMovePosition;
+    private Tween forceMoveTween;
 
     protected void Awake()
     {
@@ -184,6 +200,14 @@ public class CubeController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isForceMoving)
+        {
+            body.velocity = Vector2.zero;
+            velocity = Vector2.zero;
+            body.MovePosition(forceMovePosition);
+            return;
+        }
+
         float dt = Time.fixedDeltaTime;
 
         TickDashTimers(dt);
@@ -443,6 +467,21 @@ public class CubeController : MonoBehaviour
     public float TerminalFallSpeed => terminalFallSpeed;
     public bool IsDashing => isDashing;
     public bool IsGroundPounding => isGroundPounding;
+    public CubeColor CurrentColor => currentColor;
+
+    public void SetCurrentColor(CubeColor color)
+    {
+        currentColor = color;
+    }
+
+    public void AddVelocity(Vector2 deltaVelocity)
+    {
+        velocity += deltaVelocity;
+        if (body != null)
+        {
+            body.velocity = velocity;
+        }
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -466,5 +505,45 @@ public class CubeController : MonoBehaviour
         Vector3 origin = bounds.center;
         Vector3 normal = new Vector3(groundNormal.x, groundNormal.y, 0f);
         Gizmos.DrawLine(origin, origin + normal * 0.8f);
+    }
+
+    private void OnDestroy()
+    {
+        forceMoveTween?.Kill();
+        forceMoveTween = null;
+    }
+
+    public void ForceMove(Vector2 worldDirection, float distance, float duration, Ease ease = Ease.OutQuad)
+    {
+        if (body == null)
+        {
+            return;
+        }
+
+        if (duration <= 0f || distance == 0f || worldDirection.sqrMagnitude < 0.0001f)
+        {
+            return;
+        }
+
+        Vector2 direction = worldDirection.normalized;
+        Vector2 startPosition = body.position;
+        Vector2 endPosition = startPosition + direction * distance;
+
+        forceMoveTween?.Kill();
+
+        isForceMoving = true;
+        forceMovePosition = startPosition;
+        body.velocity = Vector2.zero;
+        velocity = Vector2.zero;
+
+        forceMoveTween = DOTween
+            .To(() => forceMovePosition, value => forceMovePosition = value, endPosition, duration)
+            .SetEase(ease)
+            .SetUpdate(UpdateType.Fixed)
+            .OnComplete(() =>
+            {
+                isForceMoving = false;
+                forceMoveTween = null;
+            });
     }
 }
