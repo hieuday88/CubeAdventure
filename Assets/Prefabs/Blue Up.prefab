@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1253305845797983295}
   - component: {fileID: 5951190173696113349}
   - component: {fileID: 3749216342979342181}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,6 @@ MonoBehaviour:
   moveDistance: 1.5
   moveDuration: 0.2
   moveEase: 6
-  onlyAffectPlayer: 1
   targetRenderer: {fileID: 0}
   glowFrom: 0
   glowTo: 5

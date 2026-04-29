@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LogicBase : MonoBehaviour
 {
@@ -18,6 +19,11 @@ public class LogicBase : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Material lineMaterial;
     private bool lineMaterialHasGlow;
+
+    [Header("Events")]
+    [SerializeField] private UnityEvent onAllInputsOn;
+
+    private bool lastAllOn;
 
     public List<LogicInput> inputs = new List<LogicInput>();
 
@@ -40,6 +46,7 @@ public class LogicBase : MonoBehaviour
     private void OnEnable()
     {
         ObserverManager<LogicEventId>.AddListener(LogicEventId.LogicInputChanged, HandleInputChanged);
+        lastAllOn = false;
         CheckInput();
     }
 
@@ -76,6 +83,12 @@ public class LogicBase : MonoBehaviour
             }
         }
 
+        if (allOn && !lastAllOn)
+        {
+            onAllInputsOn?.Invoke();
+        }
+        lastAllOn = allOn;
+
         if (spriteRenderer != null)
         {
             spriteRenderer.color = allOn ? onColor : offColor;
@@ -101,13 +114,5 @@ public class LogicBase : MonoBehaviour
                 }
             }
         }
-
-        DoSomeThing(allOn);
-
-    }
-
-    protected virtual void DoSomeThing(bool allOn)
-    {
-
     }
 }

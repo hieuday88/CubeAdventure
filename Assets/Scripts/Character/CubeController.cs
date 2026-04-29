@@ -5,12 +5,12 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D))]
 public class CubeController : MonoBehaviour
 {
-    public enum CubeColor
+    public enum CubeLayer
     {
-        Default,
-        Red,
-        Green,
-        Blue
+        White = 9,
+        Red = 6,
+        Green = 7,
+        Blue = 8
     }
 
     [Header("Input Actions")]
@@ -55,8 +55,9 @@ public class CubeController : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool drawDebugGizmos;
 
-    [Header("Color State")]
-    [SerializeField] private CubeColor currentColor = CubeColor.Default;
+    [Header("Layer State")]
+    [Tooltip("If set to -1, keep the GameObject's current layer.")]
+    [SerializeField] private int startLayer = -1;
 
     private const int MaxGroundHits = 8;
 
@@ -103,6 +104,11 @@ public class CubeController : MonoBehaviour
         //body.freezeRotation = true;
 
         RebuildContactFilter();
+
+        if (startLayer >= 0)
+        {
+            SetCurrentLayer(startLayer);
+        }
     }
 
     private void OnEnable()
@@ -170,6 +176,8 @@ public class CubeController : MonoBehaviour
         dashSpeed = Mathf.Max(0.1f, dashSpeed);
         dashDuration = Mathf.Max(0.01f, dashDuration);
         dashCooldown = Mathf.Max(0f, dashCooldown);
+
+        startLayer = Mathf.Clamp(startLayer, -1, 31);
 
         RebuildContactFilter();
     }
@@ -467,11 +475,39 @@ public class CubeController : MonoBehaviour
     public float TerminalFallSpeed => terminalFallSpeed;
     public bool IsDashing => isDashing;
     public bool IsGroundPounding => isGroundPounding;
-    public CubeColor CurrentColor => currentColor;
+    public int CurrentLayer => gameObject.layer;
 
-    public void SetCurrentColor(CubeColor color)
+    public void SetCurrentLayer(CubeLayer layer)
     {
-        currentColor = color;
+        SetCurrentLayer((int)layer);
+    }
+
+    public void SetCurrentLayer(int layer)
+    {
+        layer = Mathf.Clamp(layer, 0, 31);
+        if (gameObject.layer == layer)
+        {
+            return;
+        }
+
+        gameObject.layer = layer;
+        ObserverManager<CubeEventId>.Post(CubeEventId.PlayerLayerChanged, layer);
+    }
+
+    public void SetCurrentLayerByName(string layerName)
+    {
+        if (string.IsNullOrWhiteSpace(layerName))
+        {
+            return;
+        }
+
+        int layer = LayerMask.NameToLayer(layerName);
+        if (layer < 0)
+        {
+            return;
+        }
+
+        SetCurrentLayer(layer);
     }
 
     public void AddVelocity(Vector2 deltaVelocity)

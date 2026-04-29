@@ -9,9 +9,6 @@ public class ForceBlock : MonoBehaviour
     [SerializeField] private float moveDuration = 0.2f;
     [SerializeField] private Ease moveEase = Ease.OutQuad;
 
-    [Header("Target Filter")]
-    [SerializeField] private bool onlyAffectPlayer = true;
-
     [Header("Glow")]
     [SerializeField] private SpriteRenderer targetRenderer;
     [SerializeField] private float glowFrom = 0f;
@@ -123,13 +120,8 @@ public class ForceBlock : MonoBehaviour
             return false;
         }
 
-        cube = other.GetComponentInParent<CubeController>();
+        cube = other.GetComponent<CubeController>();
         if (cube == null)
-        {
-            return false;
-        }
-
-        if (cube.CurrentColor != CubeController.CubeColor.Blue)
         {
             return false;
         }
@@ -137,7 +129,7 @@ public class ForceBlock : MonoBehaviour
         body = other.attachedRigidbody;
         if (body == null)
         {
-            body = other.GetComponentInParent<Rigidbody2D>();
+            body = other.GetComponent<Rigidbody2D>();
         }
 
         return body != null;

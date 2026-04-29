@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3538164414848666458}
   - component: {fileID: 305781472876276996}
   - component: {fileID: 8643076635458615852}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Liquid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

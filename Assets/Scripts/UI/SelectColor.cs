@@ -213,18 +213,18 @@ public class SelectColor : MonoBehaviour
 
         targetRenderer.color = hoveredColor switch
         {
-            MenuColor.Red => ApplyColorState(cubeController, CubeController.CubeColor.Red, redColor),
-            MenuColor.Green => ApplyColorState(cubeController, CubeController.CubeColor.Green, greenColor),
-            MenuColor.Blue => ApplyColorState(cubeController, CubeController.CubeColor.Blue, blueColor),
-            _ => ApplyColorState(cubeController, CubeController.CubeColor.Default, defaultTargetColor)
+            MenuColor.Red => ApplyLayerState(cubeController, CubeController.CubeLayer.Red, redColor),
+            MenuColor.Green => ApplyLayerState(cubeController, CubeController.CubeLayer.Green, greenColor),
+            MenuColor.Blue => ApplyLayerState(cubeController, CubeController.CubeLayer.Blue, blueColor),
+            _ => ApplyLayerState(cubeController, CubeController.CubeLayer.White, defaultTargetColor)
         };
     }
 
-    private Color ApplyColorState(CubeController cubeController, CubeController.CubeColor cubeColor, Color color)
+    private Color ApplyLayerState(CubeController cubeController, CubeController.CubeLayer layer, Color color)
     {
         if (cubeController != null)
         {
-            cubeController.SetCurrentColor(cubeColor);
+            cubeController.SetCurrentLayer(layer);
         }
 
         return color;
