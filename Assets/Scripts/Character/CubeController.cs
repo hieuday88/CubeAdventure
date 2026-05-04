@@ -69,6 +69,8 @@ public class CubeController : MonoBehaviour
 
     private Vector2 velocity;
     private Vector2 groundNormal = Vector2.up;
+    // External velocity applied each physics step (e.g., moving platforms)
+    private Vector2 externalVelocity = Vector2.zero;
 
     private float moveInput;
     private Vector2 moveInputVector;
@@ -225,8 +227,8 @@ public class CubeController : MonoBehaviour
         TickJumpLogic();
         TickGravity(dt);
 
-        body.velocity = velocity;
-        velocity = body.velocity;
+        body.velocity = velocity + externalVelocity;
+        velocity = body.velocity - externalVelocity;
         UpdateGroundState();
 
         jumpReleasedThisFrame = false;
@@ -492,6 +494,17 @@ public class CubeController : MonoBehaviour
 
         gameObject.layer = layer;
         ObserverManager<CubeEventId>.Post(CubeEventId.PlayerLayerChanged, layer);
+    }
+
+    // Called by external systems (e.g., moving platforms) to apply a persistent velocity for this physics frame
+    public void SetExternalVelocity(Vector2 vel)
+    {
+        externalVelocity = vel;
+    }
+
+    public void ClearExternalVelocity()
+    {
+        externalVelocity = Vector2.zero;
     }
 
     public void SetCurrentLayerByName(string layerName)

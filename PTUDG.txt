@@ -1,0 +1,127 @@
+CẤU TRÚC BÁO CÁO PHÁT TRIỂN ỨNG DỤNG GAME 
+I. Hình thức báo cáo - Theo quy định trình bày bài tập lớn của Nhà trường.  
+II. Nội dung báo cáo 
+MỞ ĐẦU 
+CHƯƠNG 1. THIẾT KẾ Ý TƯỞNG GAME 
+1.1. Giới thiệu ([1]- INTRODUCTION) 
+1.2. Thể loại game ([1]- GENRE) 
+1.3. Tóm tắt game ([1]- DESIGNER’S STATEMENT  ) 
+1.4. Khách hàng mục tiêu ([1] -TARGET AUDIENCE ) 
+1.5. Điểm mạnh của game (có thể cốt truyện, đồ họa, cách chơi, … Trả lời cho câu hỏi: Vì sao 
+người chơi muốn trải nghiệm game này?) 
+1.6. Phong cách nghệ thuật game ([1] - ART DIRECTION) 
+1.7. Thiết bị trải nghiệm game (máy chơi game chuyên biệt, máy tính, điện 
+thoại, … ) 
+1.8. Phương thức kiếm tiền từ game (nếu có) 
+CHƯƠNG 2. THIẾT KẾ PHÁT TRIỂN GAME 
+2.1. Thiết kế kịch bản game 
+2.1.1. Cách chơi chính ([2] Core gameplay) - Là tập các hành động mà người chơi sẽ thực hiện thường xuyên trong 
+quá trình trải nghiệm game và không thể thiếu để giành chiến thắng trong trò 
+chơi. 
+2.1.2. Cốt chuyện của game (nếu có, tham khảo [1] – Story) 
+2.1.3. Các phần tử của game (Game Elements) - Mỗi phần tử game có thể là: player, enemies, objects, … - Mỗi phần tử game mô tả: tính chất, hoạt động, ảnh hưởng của nó khi 
+tương tác với player hoặc đối với các đối tượng khác; hình ảnh đồ họa. - Tham khảo cách viết tài liệu [1] và [2], có thể viết theo kiểu tài liệu [2] 
+và bổ sung thêm hình ảnh của từng phần tử. 
+2.1.4. Các cơ chế của game (Game Mechanic – [1] MECHANICS, ) 
+- Game Mechanic là các phương thức kết hợp các yếu tố trong game (Game 
+Element) để định nghĩa và bổ trợ cho Gameplay. Game Mechanic xác định trò 
+chơi sẽ diễn ra như thế nào. - VD: “Khi avatar đi vào đầm lầy, những con cóc đen bắt đầu thải ra một 
+loại khí độc mà người chơi có thể nhìn thấy tràn ngập màn hình. Nó bắt đầu ở 
+dưới cùng và tăng lên với tốc độ 1 inch cứ sau 3 giây; hết 3 phút, khí cao ngang 
+mặt avatar, nếu lúc đó avatar vẫn ở trong đầm lầy thì avatar đó chết. Nếu avatar 
+quay trở lại đầm lầy sau đó, khí sẽ hết nhưng quá trình sẽ bắt đầu lại từ đầu.” - Tham khảo thêm cách viết của tài liệu [1]  
+2.2. Thiết kế giao diện (Tham khảo tài liệu [2]) 
+2.2.1. Biểu đồ - Flowchart  
+2.2.2. Mô tả  
+2.2.3. Giao diện các màn hình - Hình ảnh màn hình thiết kế - Mô tả hoạt động của các đối tượng trên mỗi màn hình: các button, các 
+thông số, … 
+2.3. Thiết kế âm thanh - Sự kiện, tình huống A cần âm thanh A1 tài nguyên cho âm thanh đó. 
+CHƯƠNG 3. CÀI ĐẶT CHƯƠNG TRÌNH VÀ KẾT QUẢ - Trình bày các kỹ thuật chính cài đặt chương trình và kết quả tương ứng. 
+KẾT LUẬN 
+TÀI LIỆU THAM KHẢO  
+Các thể loại Game - Game Genres 
+1. Shooter Games 
+2. Action and Arcade Games 
+o Platform games 
+o Fighting games 
+3. Strategy Games 
+4. Role-Playing Games 
+5. Sports Games 
+6. Vehicle Simulations 
+7. Construction and Simulation Games 
+8. Adventure Games 
+9. Puzzle Games  
+Game Elements và Game Mechanic  
+Game Element có thể hiểu một cách đơn giản là các thành 
+phần tạo nên game . 
+Ví dụ: nhân vật, trang bị, các yếu tố môi trường,… 
+Game Mechanic là các phương thức kết hợp các yếu tố 
+trong game (Game Element) để định nghĩa và bổ trợ cho 
+Gameplay. Game Mechanic xác định trò chơi sẽ diễn ra như thế 
+nào. - VD: “Khi avatar đi vào đầm lầy, những con cóc đen bắt đầu 
+thải ra một loại khí độc mà người chơi có thể nhìn thấy tràn 
+ngập màn hình. Nó bắt đầu ở dưới cùng và tăng lên với tốc 
+độ 1 inch cứ sau 3 giây; hết 3 phút, khí cao ngang mặt avatar, 
+nếu lúc đó avatar vẫn ở trong đầm lầy thì avatar đó chết. 
+Nếu avatar quay trở lại đầm lầy sau đó, khí sẽ hết nhưng quá 
+trình sẽ bắt đầu lại từ đầu.” 
+Monetization – mô hình kiếm tiền của game? 
+1. Tránh làm phiền người khác 
+Rất nhiều game có cơ chế cho phép người chơi có thể nhận 
+được tiền hoặc vật phẩm trong game thông qua việc gửi tin 
+nhắn hoặc lời mời đến bạn bè hoặc trả tiền. 
+Nếu gửi lời mời đến bạn bè  Làm phiền, gây khó chịu cho 
+bạn bè  giải pháp trả tiền. 
+Gợi ý thiết kế tính năng tương ứng 
+Cho phép người chơi lựa chọn giữa việc trả tiền hoặc chia 
+sẻ, lan truyền game của mình. 
+2. Trở nên mạnh mẽ hơn 
+Cho phép người chơi có ưu thế hơn những người chơi khác 
+khi họ trả tiền – Pay to Win. 
+Gợi ý thiết kế tính năng tương ứng 
+ Trang bị có sức mạnh lớn. 
+ Tổ chức sự kiện hoặc cuộc thi với phần thưởng 
+lớn(người chơi trả tiền sẽ có được một số ưu thế). 
+3. Khám phá nội dung 
+Thiết kế để người chơi sẽ được trải nghiệm một phần nội 
+dung game hoặc toàn bộ nội dung game trong một khoảng 
+thời gian giới hạn.  Để mở khóa toàn bộ, họ cần trả tiền. 
+Hoặc khi game ra mắt nội dung mới trong các bản cập nhật, 
+vài phần cần được trả tiền để tải về 
+4. Tặng quà cho người chơi khác 
+Một vài game bán những vật phẩm mà người chơi có thể 
+mua để tặng cho bạn của họ. 
+Đôi khi những vật phẩm này mang những nét độc đáo và 
+người chơi chỉ có thể có được chúng qua việc mua bằng tiền 
+thật. Tâm lí này áp dụng ở những game có tính cộng đồng, 
+đông đảo người chơi. 
+Gợi ý thiết kế tính năng tương ứng 
+Thiết kế chế độ để vinh danh người tặng và được tặng quà 
+(thông báo toàn server). 
+Làm cho món quà tặng trả nên đặc biệt, độc nhất vô nhị. 
+5. Đầu tư 
+Chơi game có thể xem như một hoạt động giải trí đơn thuần 
+như các hoạt động khác (thể thao, đi du lịch,…). Nếu thích, 
+bạn sẽ đầu tư cho nó. 
+Gợi ý thiết kế tính năng tương ứng 
+Đầu tư thiết kế nội dung nhắm vào một phân khúc người 
+dùng nào đó, để khiến họ trở thành một fans trung thành 
+với game. 
+6. Tính cá nhân hóa 
+Tính cá nhân hóa cho phép nhân vật của người chơi được 
+khác biệt so với phần còn lại. 
+Họ có thể chi một số tiền rất lớn chỉ để có được vẻ bề ngoài 
+(skin) độc đáo. 
+Gợi ý thiết kế tính năng tương ứng 
+Xây dựng hệ thống skin cho nhân vật, trang bị. 
+Tạo điều kiện để người chơi có thể thể hiện nét cá nhân hóa 
+của mình. 
+7. Chơi với bạn 
+Một số nhà Thiết Kế Game nắm được tâm lí muốn được chơi 
+trò chơi với bạn bè của nhiều người chơi. Nên sẽ cần trả tiền 
+cho họ nếu bạn muốn chơi tổ đội (Clan, Co-op) hoặc mở 
+khóa chế độ Mutiplayer. 
+Gợi ý thiết kế tính năng tương ứng 
+Thiết kế một số nội dung chỉ có thể trải nghiệm hoàn chỉnh 
+nếu chơi với bạn (Đánh Boss Party, Clan War…). 
+…. 
